@@ -1,0 +1,142 @@
+﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:v="clr-namespace:ConcentrationDominos.Views"
+        xmlns:c="clr-namespace:ConcentrationDominos.Controls"
+        xmlns:b="clr-namespace:ConcentrationDominos.Behaviors"
+        x:Class="ConcentrationDominos.Views.GameView"
+        mc:Ignorable="d" 
+        Title="Concentration Dominos"
+        Height="600"
+        SizeToContent="Width">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Grid.Row="0"
+                Grid.Column="0"
+                Command="{Binding UnpauseCommand}">
+            <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
+                          Definition="{StaticResource PlayIconDefinition}"
+                          ToolTip="Unpause"/>
+        </Button>
+
+        <Button Grid.Row="0"
+                Grid.Column="1"
+                Command="{Binding PauseCommand}">
+            <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
+                          Definition="{StaticResource PauseIconDefinition}"
+                          ToolTip="Pause"/>
+        </Button>
+
+        <Border Grid.Row="0"
+                Grid.Column="2"
+                BorderBrush="Gray"
+                BorderThickness="1">
+            <Viewbox Stretch="Uniform">
+                <TextBlock HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           Text="{Binding Runtime, StringFormat=hh\\:mm\\:ss\\.ff}"/>
+            </Viewbox>
+        </Border>
+
+        <Button Grid.Row="0"
+                Grid.Column="3"
+                Command="{Binding RestartCommand}">
+            <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
+                          Definition="{StaticResource RestartIconDefinition}"
+                          ToolTip="Restart"/>
+        </Button>
+
+        <Button Grid.Row="0"
+                Grid.Column="4"
+                Command="{Binding RequestSettingsChangeCommand}">
+            <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
+                          Definition="{StaticResource SettingsIconDefinition}"
+                          ToolTip="Settings"/>
+        </Button>
+
+        <Grid Grid.Row="1"
+              Grid.Column="0"
+              Grid.ColumnSpan="5">
+            <v:GameBoardView DataContext="{Binding GameBoard}"/>
+
+            <Grid Background="#77CCCCCC"
+                  Visibility="Hidden">
+                <i:Interaction.Behaviors>
+                    <b:VisibilityController IsHidden="{Binding GameBoard.IsInteractable}"/>
+                </i:Interaction.Behaviors>
+
+                <Border HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="WhiteSmoke"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="15">
+                    <i:Interaction.Behaviors>
+                        <b:VisibilityController IsVisible="{Binding IsComplete}"/>
+                    </i:Interaction.Behaviors>
+                    <TextBlock FontWeight="Bold"
+                               FontSize="40"
+                               Text="Victory!"/>
+                </Border>
+
+                <Button HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="WhiteSmoke"
+                        BorderBrush="Black"
+                        BorderThickness="1"
+                        Padding="15"
+                        Command="{Binding RestartCommand}">
+                    <i:Interaction.Behaviors>
+                        <b:VisibilityController IsVisible="{Binding IsIdle}"/>
+                    </i:Interaction.Behaviors>
+                    <TextBlock FontWeight="Bold"
+                               FontSize="40"
+                               Text="Start"/>
+                </Button>
+
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="0"
+              Grid.Column="0"
+              Grid.RowSpan="2"
+              Grid.ColumnSpan="5"
+              Background="#77CCCCCC"
+              Visibility="Hidden"
+              DataContext="{Binding Settings}">
+            <i:Interaction.Triggers>
+                <b:ObservableUnitTrigger Source="{Binding ChangesRequested}">
+                    <b:SetVisibilityAction Value="Visible"/>
+                </b:ObservableUnitTrigger>
+                <b:ObservableUnitTrigger Source="{Binding OperationCompleted}">
+                    <b:SetVisibilityAction Value="Hidden"/>
+                </b:ObservableUnitTrigger>
+            </i:Interaction.Triggers>
+            <Border HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="WhiteSmoke"
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    Padding="15">
+                <v:GameSettingsView/>
+            </Border>
+        </Grid>
+
+    </Grid>
+</Window>

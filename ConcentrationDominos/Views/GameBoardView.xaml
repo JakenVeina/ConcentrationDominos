@@ -1,0 +1,37 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:v="clr-namespace:ConcentrationDominos.Views"
+             xmlns:vm="clr-namespace:ConcentrationDominos.ViewModels"
+             xmlns:b="clr-namespace:ConcentrationDominos.Behaviors"
+             x:Class="ConcentrationDominos.Views.GameBoardView"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:GameBoardViewModel}">
+    <Viewbox Stretch="Uniform">
+        <ItemsControl ItemsSource="{Binding}"
+                        Padding="5">
+            <ItemsControl.DataContext>
+                <CollectionViewSource Source="{Binding Tiles}">
+                    <CollectionViewSource.SortDescriptions>
+                        <scm:SortDescription PropertyName="RowIndex"/>
+                        <scm:SortDescription PropertyName="ColIndex"/>
+                    </CollectionViewSource.SortDescriptions>
+                </CollectionViewSource>
+            </ItemsControl.DataContext>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="{Binding DataContext.Width, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    Rows="{Binding DataContext.Height, RelativeSource={RelativeSource AncestorType=UserControl}}"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <v:GameBoardTileView Padding="5"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Viewbox>
+</UserControl>

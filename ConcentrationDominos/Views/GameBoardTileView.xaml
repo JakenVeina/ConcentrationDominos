@@ -1,0 +1,39 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:b="clr-namespace:ConcentrationDominos.Behaviors"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:ConcentrationDominos.ViewModels"
+             xmlns:c="clr-namespace:ConcentrationDominos.Controls"
+             x:Class="ConcentrationDominos.Views.GameBoardTileView"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:GameBoardTileViewModel}">
+    <Button HorizontalContentAlignment="Stretch"
+            Command="{Binding FlipCommand}"
+            BorderBrush="{x:Null}"
+            BorderThickness="0"
+            Background="{x:Null}">
+        <i:Interaction.Behaviors>
+            <b:VisibilityController IsHidden="{Binding IsEmpty}"/>
+        </i:Interaction.Behaviors>
+        <Viewbox Stretch="Uniform">
+            <Border BorderBrush="Black"
+                    BorderThickness="6"
+                    CornerRadius="6"
+                    Background="LightGray">
+                <StackPanel Background="White">
+                    <i:Interaction.Behaviors>
+                        <b:VisibilityController IsVisible="{Binding IsFaceUp}"/>
+                    </i:Interaction.Behaviors>
+                    <c:VectorIcon Style="{StaticResource DominoSuitIconStyle}"
+                                  DataContext="{Binding FirstSuit}" />
+                    <c:VectorIcon Definition="{StaticResource DominoSuitSeparatorIconDefinition}"
+                                  Brush="Black"/>
+                    <c:VectorIcon Style="{StaticResource DominoSuitIconStyle}"
+                                  DataContext="{Binding SecondSuit}" />
+                </StackPanel>
+            </Border>
+        </Viewbox>
+    </Button>
+</UserControl>
