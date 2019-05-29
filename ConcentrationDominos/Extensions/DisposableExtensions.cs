@@ -5,7 +5,7 @@
         public static T DisposeWith<T>(this T disposable, CompositeDisposable disposables)
             where T : IDisposable
         {
-            if (disposable is null)
+            if (disposable == null)
                 throw new ArgumentNullException(nameof(disposable));
 
             if (disposables is null)

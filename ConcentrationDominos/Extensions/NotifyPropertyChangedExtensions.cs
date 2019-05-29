@@ -10,7 +10,7 @@ namespace System.Reactive.Linq
         public static IObservable<TProperty> ObserveProperty<TOwner, TProperty>(this TOwner owner, Expression<Func<TOwner, TProperty>> propertyExpression)
             where TOwner : INotifyPropertyChanged
         {
-            if (owner is null)
+            if (owner == null)
                 throw new ArgumentNullException(nameof(owner));
 
             if (propertyExpression is null)
@@ -44,7 +44,7 @@ namespace System.Reactive.Linq
         public static IObservable<TProperty> WhenPropertyChanged<TOwner, TProperty>(this TOwner owner, Expression<Func<TOwner, TProperty>> propertyExpression)
             where TOwner : INotifyPropertyChanged
         {
-            if (owner is null)
+            if (owner == null)
                 throw new ArgumentNullException(nameof(owner));
 
             if (propertyExpression is null)
