@@ -3,6 +3,7 @@
     public enum GameState
     {
         Idle,
+        Ready,
         Running,
         Paused,
         Waiting,

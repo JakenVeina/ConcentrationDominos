@@ -16,7 +16,9 @@ namespace ConcentrationDominos.Gameplay
 
         IObservable<bool> CanRequestSettingsChange { get; }
 
-        IObservable<bool> CanRestart { get; }
+        IObservable<bool> CanReset { get; }
+
+        IObservable<bool> CanStart { get; }
 
         IObservable<bool> CanUnpause { get; }
 
@@ -32,7 +34,7 @@ namespace ConcentrationDominos.Gameplay
 
         void Reset();
 
-        void Restart();
+        void Start();
 
         void Unpause();
     }
@@ -48,14 +50,17 @@ namespace ConcentrationDominos.Gameplay
             _gameState = gameState;
             _random = random;
 
-            CanRequestSettingsChange = _gameState.State
-                .Select(x => x != GameState.Waiting);
-
             CanPause = _gameState.State
                 .Select(x => x == GameState.Running);
 
-            CanRestart = _gameState.State
-                .Select(x => (x != GameState.Waiting));
+            CanRequestSettingsChange = _gameState.State
+                .Select(x => x != GameState.Waiting);
+
+            CanReset = _gameState.State
+                .Select(x => (x != GameState.Waiting) && (x != GameState.Idle));
+
+            CanStart = _gameState.State
+                .Select(x => x == GameState.Idle);
 
             CanUnpause = _gameState.State
                 .Select(x => x == GameState.Paused);
@@ -63,11 +68,13 @@ namespace ConcentrationDominos.Gameplay
             _settingsChangeRequested = new Subject<Unit>();
         }
 
-        public IObservable<bool> CanRequestSettingsChange { get; }
-
         public IObservable<bool> CanPause { get; }
 
-        public IObservable<bool> CanRestart { get; }
+        public IObservable<bool> CanRequestSettingsChange { get; }
+
+        public IObservable<bool> CanReset { get; }
+
+        public IObservable<bool> CanStart { get; }
 
         public IObservable<bool> CanUnpause { get; }
 
@@ -154,14 +161,8 @@ namespace ConcentrationDominos.Gameplay
 
         public void Reset()
         {
-            foreach(var tile in _gameState.GameBoard.Value.Tiles)
-                tile.Content.Value = null;
             _gameState.State.Value = GameState.Idle;
-        }
 
-        public void Restart()
-        {
-            _gameState.State.Value = GameState.Idle;
             var mappings = _gameState.GameBoard.Value
                 .Tiles
                 .Zip(_gameState.DominoSet.Value
@@ -169,15 +170,16 @@ namespace ConcentrationDominos.Gameplay
                         .OrderBy(x => _random.Next()),
                     (tile, domino) => (tile, domino));
 
-            foreach(var mapping in mappings)
+            foreach (var mapping in mappings)
             {
                 mapping.tile.Content.Value = mapping.domino;
                 mapping.tile.IsFaceUp.Value = false;
                 mapping.tile.IsRotated.Value = (_random.Next() % 2) == 0;
             }
-
-            _gameState.State.Value = GameState.Running;
         }
+
+        public void Start()
+            => _gameState.State.Value = GameState.Running;
 
         public void Unpause()
             => _gameState.State.Value = GameState.Running;

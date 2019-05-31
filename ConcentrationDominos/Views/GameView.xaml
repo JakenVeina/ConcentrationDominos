@@ -54,10 +54,10 @@
 
         <Button Grid.Row="0"
                 Grid.Column="3"
-                Command="{Binding RestartCommand}">
+                Command="{Binding ResetCommand}">
             <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
                           Definition="{StaticResource RestartIconDefinition}"
-                          ToolTip="Restart"/>
+                          ToolTip="Reset"/>
         </Button>
 
         <Button Grid.Row="0"
@@ -100,7 +100,7 @@
                         BorderBrush="Black"
                         BorderThickness="1"
                         Padding="15"
-                        Command="{Binding RestartCommand}">
+                        Command="{Binding StartCommand}">
                     <i:Interaction.Behaviors>
                         <b:VisibilityController IsVisible="{Binding IsIdle}"/>
                     </i:Interaction.Behaviors>

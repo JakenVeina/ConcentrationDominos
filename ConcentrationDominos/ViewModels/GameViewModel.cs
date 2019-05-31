@@ -21,13 +21,15 @@ namespace ConcentrationDominos.ViewModels
 
         IActionCommand PauseCommand { get; }
 
-        IActionCommand RestartCommand { get; }
-
         IActionCommand RequestSettingsChangeCommand { get; }
+
+        IActionCommand ResetCommand { get; }
 
         TimeSpan Runtime { get; }
 
         IGameSettingsViewModel Settings { get; }
+
+        IActionCommand StartCommand { get; }
 
         IActionCommand UnpauseCommand { get; }
     }
@@ -60,14 +62,14 @@ namespace ConcentrationDominos.ViewModels
                     canExecute: gameplayService.CanPause)
                 .DisposeWith(_subscriptions);
 
-            RestartCommand = new ActionCommand(
-                    execute: gameplayService.Restart,
-                    canExecute: gameplayService.CanRestart)
-                .DisposeWith(_subscriptions);
-
             RequestSettingsChangeCommand = new ActionCommand(
                     execute: gameplayService.RequestSettingsChange,
                     canExecute: gameplayService.CanRequestSettingsChange)
+                .DisposeWith(_subscriptions);
+
+            ResetCommand = new ActionCommand(
+                    execute: gameplayService.Reset,
+                    canExecute: gameplayService.CanReset)
                 .DisposeWith(_subscriptions);
 
             gameState.Runtime
@@ -75,6 +77,11 @@ namespace ConcentrationDominos.ViewModels
                 .DisposeWith(_subscriptions);
 
             Settings = settings;
+
+            StartCommand = new ActionCommand(
+                    execute: gameplayService.Start,
+                    canExecute: gameplayService.CanStart)
+                .DisposeWith(_subscriptions);
 
             UnpauseCommand = new ActionCommand(
                     execute: gameplayService.Unpause,
@@ -100,9 +107,9 @@ namespace ConcentrationDominos.ViewModels
 
         public IActionCommand PauseCommand { get; }
 
-        public IActionCommand RestartCommand { get; }
-
         public IActionCommand RequestSettingsChangeCommand { get; }
+
+        public IActionCommand ResetCommand { get; }
 
         public TimeSpan Runtime
         {
@@ -112,6 +119,8 @@ namespace ConcentrationDominos.ViewModels
         private TimeSpan _runtime;
 
         public IGameSettingsViewModel Settings { get; }
+
+        public IActionCommand StartCommand { get; }
 
         public IActionCommand UnpauseCommand { get; }
 

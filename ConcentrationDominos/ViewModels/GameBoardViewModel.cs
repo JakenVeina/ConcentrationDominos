@@ -44,11 +44,6 @@ namespace ConcentrationDominos.ViewModels
                 .Subscribe(x => IsInteractable = x)
                 .DisposeWith(_subscriptions);
 
-            gameState.State
-                .Select(x => x == GameState.Completed)
-                .Subscribe(x => IsComplete = x)
-                .DisposeWith(_subscriptions);
-
             gameState.GameBoard
                 .Subscribe(x =>
                 {
@@ -82,13 +77,6 @@ namespace ConcentrationDominos.ViewModels
             set => TrySetProperty(ref _height, value);
         }
         private ushort _height;
-
-        public bool IsComplete
-        {
-            get => _isComplete;
-            set => TrySetProperty(ref _isComplete, value);
-        }
-        private bool _isComplete;
 
         public bool IsInteractable
         {

@@ -23,13 +23,13 @@ namespace ConcentrationDominos.Gameplay
                 {
                     if (_gameState.DominoSet.Value.Type != settings.DominoSetType)
                     {
-                        _gameplayService.Reset();
-
                         _gameState.DominoSet.Value = new DominoSetModel(settings.DominoSetType);
 
                         var gameBoardSize = _gameBoardSizeMap[settings.DominoSetType];
 
                         _gameState.GameBoard.Value = new GameBoardModel(gameBoardSize.width, gameBoardSize.height);
+
+                        _gameplayService.Reset();
                     }
                 });
         }

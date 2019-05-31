@@ -39,13 +39,13 @@ namespace ConcentrationDominos
                 .AddTransient<IGameViewModel, GameViewModel>()
                 .BuildServiceProvider();
 
-            _serviceProvider.GetService<GameStateModel>()
+            _serviceProvider.GetRequiredService<GameStateModel>()
                 .UpdateInterval = TimeSpan.FromSeconds(1.0 / 60.0);
 
             foreach (var behavior in _serviceProvider.GetServices<IBehavior>())
                 behavior.Start();
 
-            _serviceProvider.GetService<GameStateModel>()
+            _serviceProvider.GetRequiredService<GameStateModel>()
                 .Settings.Value = new GameSettingsModel(
                     dominoSetType: DominoSetType.DoubleSix,
                     memoryInterval: TimeSpan.FromSeconds(1));
