@@ -140,11 +140,11 @@ namespace ConcentrationDominos.Gameplay
                         .OrderBy(x => _random.Next()),
                     (tile, domino) => (tile, domino));
 
-            foreach (var mapping in mappings)
+            foreach (var (tile, domino) in mappings)
             {
-                mapping.tile.Content.Value = mapping.domino;
-                mapping.tile.IsFaceUp.Value = false;
-                mapping.tile.IsRotated.Value = (_random.Next() % 2) == 0;
+                tile.Content.Value = domino;
+                tile.IsFaceUp.Value = false;
+                tile.IsRotated.Value = (_random.Next() % 2) == 0;
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -19,7 +19,7 @@ namespace ConcentrationDominos.ViewModels
 
         bool IsInteractable { get; }
 
-        IReadOnlyList<IGameBoardTileViewModel> Tiles { get; }
+        ImmutableArray<IGameBoardTileViewModel> Tiles { get; }
 
         ushort Width { get; }
     }
@@ -44,12 +44,12 @@ namespace ConcentrationDominos.ViewModels
                 .Subscribe(x => IsInteractable = x)
                 .DisposeWith(_subscriptions);
 
+            _tiles = ImmutableArray<IGameBoardTileViewModel>.Empty;
             gameState.GameBoard
                 .Subscribe(x =>
                 {
-                    if(!(_tiles is null))
-                        foreach (var tile in _tiles)
-                            tile.Dispose();
+                    foreach (var tile in _tiles)
+                        tile.Dispose();
 
                     Tiles = x.Tiles
                         .Select(y =>
@@ -61,7 +61,7 @@ namespace ConcentrationDominos.ViewModels
     
                             return viewModel;
                         })
-                        .ToArray();
+                        .ToImmutableArray();
                 })
                 .DisposeWith(_subscriptions);
 
@@ -85,12 +85,12 @@ namespace ConcentrationDominos.ViewModels
         }
         private bool _isInteractable;
 
-        public IReadOnlyList<IGameBoardTileViewModel> Tiles
+        public ImmutableArray<IGameBoardTileViewModel> Tiles
         {
             get => _tiles;
             set => TrySetProperty(ref _tiles, value);
         }
-        private IReadOnlyList<IGameBoardTileViewModel> _tiles;
+        private ImmutableArray<IGameBoardTileViewModel> _tiles;
 
         public ushort Width
         {

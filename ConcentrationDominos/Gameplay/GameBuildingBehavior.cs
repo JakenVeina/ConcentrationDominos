@@ -25,9 +25,9 @@ namespace ConcentrationDominos.Gameplay
                     {
                         _gameState.DominoSet.Value = new DominoSetModel(settings.DominoSetType);
 
-                        var gameBoardSize = _gameBoardSizeMap[settings.DominoSetType];
+                        var (width, height) = _gameBoardSizeMap[settings.DominoSetType];
 
-                        _gameState.GameBoard.Value = new GameBoardModel(gameBoardSize.width, gameBoardSize.height);
+                        _gameState.GameBoard.Value = new GameBoardModel(width, height);
 
                         _gameplayService.Reset();
                     }

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 using System.Linq;
 
 namespace ConcentrationDominos.Models
@@ -15,12 +15,12 @@ namespace ConcentrationDominos.Models
                     .Select(colIndex => new GameBoardTileModel(
                         (ushort)colIndex,
                         (ushort)rowIndex)))
-                .ToArray();
+                .ToImmutableArray();
         }
 
         public ushort Height { get; }
 
-        public IReadOnlyList<GameBoardTileModel> Tiles { get; }
+        public ImmutableArray<GameBoardTileModel> Tiles { get; }
 
         public ushort Width { get; }
     }

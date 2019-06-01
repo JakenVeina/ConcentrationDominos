@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Input;
 
-using ConcentrationDominos.Gameplay;
 using ConcentrationDominos.Models;
 
 namespace ConcentrationDominos.ViewModels
@@ -17,11 +16,11 @@ namespace ConcentrationDominos.ViewModels
     {
         DominoSetType DominoSetType { get; }
 
-        IReadOnlyList<DominoSetType> DominoSetTypes { get; }
+        ImmutableArray<DominoSetType> DominoSetTypes { get; }
 
         TimeSpan MemoryInterval { get; }
 
-        IReadOnlyList<TimeSpan> MemoryIntervals { get; }
+        ImmutableArray<TimeSpan> MemoryIntervals { get; }
 
         IActionCommand SaveCommand { get; }
 
@@ -80,14 +79,14 @@ namespace ConcentrationDominos.ViewModels
         }
         private DominoSetType _dominoSetType;
 
-        public IReadOnlyList<DominoSetType> DominoSetTypes
+        public ImmutableArray<DominoSetType> DominoSetTypes
             => _dominoSetTypes;
-        private static readonly DominoSetType[] _dominoSetTypes
+        private static readonly ImmutableArray<DominoSetType> _dominoSetTypes
             = Enum.GetValues(typeof(DominoSetType))
                 .Cast<DominoSetType>()
                 .Where(x => x != DominoSetType.Empty)
                 .OrderBy(x => (int)x)
-                .ToArray();
+                .ToImmutableArray();
 
         public TimeSpan MemoryInterval
         {
@@ -96,17 +95,15 @@ namespace ConcentrationDominos.ViewModels
         }
         private TimeSpan _memoryInterval;
 
-        public IReadOnlyList<TimeSpan> MemoryIntervals
+        public ImmutableArray<TimeSpan> MemoryIntervals
             => _memoryIntervals;
-        private static readonly TimeSpan[] _memoryIntervals
-            = new[]
-            {
+        private static readonly ImmutableArray<TimeSpan> _memoryIntervals
+            = ImmutableArray.Create<TimeSpan>(
                 TimeSpan.Zero,
                 TimeSpan.FromSeconds(0.5),
                 TimeSpan.FromSeconds(1),
                 TimeSpan.FromSeconds(2),
-                TimeSpan.FromSeconds(5)
-            };
+                TimeSpan.FromSeconds(5));
 
         public IActionCommand SaveCommand { get; }
 

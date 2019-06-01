@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Reactive.Disposables;
 using System.Windows.Input;
 
-using ConcentrationDominos.Gameplay;
 using ConcentrationDominos.Models;
 
 namespace ConcentrationDominos.ViewModels
@@ -11,7 +10,7 @@ namespace ConcentrationDominos.ViewModels
     public interface IGameInstructionsViewModel
         : IDisposable
     {
-        IReadOnlyList<string> InstructionLines { get; }
+        ImmutableArray<string> InstructionLines { get; }
 
         IActionCommand ConfirmCommand { get; }
     }
@@ -32,7 +31,7 @@ namespace ConcentrationDominos.ViewModels
                 .DisposeWith(_subscriptions);
         }
 
-        public IReadOnlyList<string> InstructionLines
+        public ImmutableArray<string> InstructionLines
             => GameInstructionsModel.InstructionLines;
 
         public IActionCommand ConfirmCommand { get; }

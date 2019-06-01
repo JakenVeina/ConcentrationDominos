@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Immutable;
 using System.Linq;
 
 namespace ConcentrationDominos.Models
@@ -16,11 +16,11 @@ namespace ConcentrationDominos.Models
                 .SelectMany(firstSuit => suits
                     .Where(secondSuit => firstSuit <= secondSuit)
                     .Select(secondSuit => new DominoModel(firstSuit, secondSuit)))
-                .ToArray();
+                .ToImmutableArray();
         }
 
         public DominoSetType Type { get; }
 
-        public IReadOnlyList<DominoModel> Dominos { get; }
+        public ImmutableArray<DominoModel> Dominos { get; }
     }
 }
