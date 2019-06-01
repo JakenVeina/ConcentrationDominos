@@ -3,4 +3,14 @@
              x:Class="ConcentrationDominos.App"
              Startup="OnStartup"
              Exit="OnExit">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/VectorIconDefinitions.xaml"/>
+                <ResourceDictionary Source="Resources/Formatters.xaml"/>
+                <ResourceDictionary Source="Resources/Styles.xaml"/>
+                <ResourceDictionary Source="Resources/DataTemplates.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>
