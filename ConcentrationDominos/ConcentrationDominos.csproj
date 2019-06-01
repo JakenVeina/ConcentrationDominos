@@ -102,11 +102,13 @@
     <Compile Include="Gameplay\GameClockBehavior.cs" />
     <Compile Include="Gameplay\GameBuildingBehavior.cs" />
     <Compile Include="Gameplay\IBehavior.cs" />
+    <Compile Include="Gameplay\NavigationService.cs" />
     <Compile Include="Models\DominoModel.cs" />
     <Compile Include="Models\DominoSetModel.cs" />
     <Compile Include="Models\DominoSetType.cs" />
     <Compile Include="Models\GameBoardModel.cs" />
     <Compile Include="Models\GameBoardTileModel.cs" />
+    <Compile Include="Models\GameInstructionsModel.cs" />
     <Compile Include="Models\GameSettingsModel.cs" />
     <Compile Include="Models\GameState.cs" />
     <Compile Include="Models\GameStateModel.cs" />
@@ -114,6 +116,7 @@
     <Compile Include="Gameplay\SystemClockBehavior.cs" />
     <Compile Include="ViewModels\GameBoardTileViewModel.cs" />
     <Compile Include="ViewModels\GameBoardViewModel.cs" />
+    <Compile Include="ViewModels\GameInstructionsViewModel.cs" />
     <Compile Include="ViewModels\GameSettingsViewModel.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -122,6 +125,9 @@
     </Compile>
     <Compile Include="Views\GameBoardView.xaml.cs">
       <DependentUpon>GameBoardView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GameInstructionsView.xaml.cs">
+      <DependentUpon>GameInstructionsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\GameSettingsView.xaml.cs">
       <DependentUpon>GameSettingsView.xaml</DependentUpon>
@@ -142,6 +148,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\GameBoardView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GameInstructionsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

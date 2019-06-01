@@ -13,21 +13,23 @@ namespace ConcentrationDominos.ViewModels
          : INotifyPropertyChanged,
             IDisposable
     {
+        object CurrentNavigationTarget { get; }
+
         IGameBoardViewModel GameBoard { get; }
 
         bool IsComplete { get; }
 
         bool IsIdle { get; }
 
-        IActionCommand PauseCommand { get; }
+        IActionCommand NavigateToInstructionsCommand { get; }
 
-        IActionCommand RequestSettingsChangeCommand { get; }
+        IActionCommand NavigateToSettingsCommand { get; }
+
+        IActionCommand PauseCommand { get; }
 
         IActionCommand ResetCommand { get; }
 
         TimeSpan Runtime { get; }
-
-        IGameSettingsViewModel Settings { get; }
 
         IActionCommand StartCommand { get; }
 
@@ -40,11 +42,20 @@ namespace ConcentrationDominos.ViewModels
     {
         public GameViewModel(
             IGameBoardViewModel gameBoard,
+            IGameInstructionsViewModel instructions,
             IGameplayService gameplayService,
+            IGameSettingsViewModel settings,
             GameStateModel gameState,
-            IGameSettingsViewModel settings)
+            INavigationService navigationService)
         {
+            _instructions = instructions;
+            _navigationService = navigationService;
+            _settings = settings;
             _subscriptions = new CompositeDisposable();
+
+            navigationService.CurrentTarget
+                .Subscribe(x => CurrentNavigationTarget = x)
+                .DisposeWith(_subscriptions);
 
             GameBoard = gameBoard
                 .DisposeWith(_subscriptions);
@@ -57,14 +68,19 @@ namespace ConcentrationDominos.ViewModels
                 })
                 .DisposeWith(_subscriptions);
 
+            NavigateToInstructionsCommand = new ActionCommand(
+                    execute: () => _navigationService.NavigateTo(_instructions),
+                    canExecute: navigationService.CanNavigateTo)
+                .DisposeWith(_subscriptions);
+
+            NavigateToSettingsCommand = new ActionCommand(
+                    execute: () => _navigationService.NavigateTo(_settings),
+                    canExecute: navigationService.CanNavigateTo)
+                .DisposeWith(_subscriptions);
+
             PauseCommand = new ActionCommand(
                     execute: gameplayService.Pause,
                     canExecute: gameplayService.CanPause)
-                .DisposeWith(_subscriptions);
-
-            RequestSettingsChangeCommand = new ActionCommand(
-                    execute: gameplayService.RequestSettingsChange,
-                    canExecute: gameplayService.CanRequestSettingsChange)
                 .DisposeWith(_subscriptions);
 
             ResetCommand = new ActionCommand(
@@ -76,8 +92,6 @@ namespace ConcentrationDominos.ViewModels
                 .Subscribe(x => Runtime = x)
                 .DisposeWith(_subscriptions);
 
-            Settings = settings;
-
             StartCommand = new ActionCommand(
                     execute: gameplayService.Start,
                     canExecute: gameplayService.CanStart)
@@ -88,6 +102,13 @@ namespace ConcentrationDominos.ViewModels
                     canExecute: gameplayService.CanUnpause)
                 .DisposeWith(_subscriptions);
         }
+
+        public object CurrentNavigationTarget
+        {
+            get => _currentNavigationTarget;
+            private set => TrySetProperty(ref _currentNavigationTarget, value);
+        }
+        private object _currentNavigationTarget;
 
         public IGameBoardViewModel GameBoard { get; }
 
@@ -105,9 +126,11 @@ namespace ConcentrationDominos.ViewModels
         }
         private bool _isIdle;
 
-        public IActionCommand PauseCommand { get; }
+        public IActionCommand NavigateToInstructionsCommand { get; }
 
-        public IActionCommand RequestSettingsChangeCommand { get; }
+        public IActionCommand NavigateToSettingsCommand { get; }
+
+        public IActionCommand PauseCommand { get; }
 
         public IActionCommand ResetCommand { get; }
 
@@ -118,14 +141,18 @@ namespace ConcentrationDominos.ViewModels
         }
         private TimeSpan _runtime;
 
-        public IGameSettingsViewModel Settings { get; }
-
         public IActionCommand StartCommand { get; }
 
         public IActionCommand UnpauseCommand { get; }
 
         public void Dispose()
             => _subscriptions.Dispose();
+
+        private readonly IGameInstructionsViewModel _instructions;
+
+        private readonly INavigationService _navigationService;
+
+        private readonly IGameSettingsViewModel _settings;
 
         private readonly CompositeDisposable _subscriptions;
     }

@@ -31,11 +31,13 @@ namespace ConcentrationDominos
                 .AddSingleton<IBehavior, GameBuildingBehavior>()
                 .AddSingleton<IBehavior, GameClockBehavior>()
                 .AddSingleton<IGameplayService, GameplayService>()
+                .AddSingleton<INavigationService, NavigationService>()
                 .AddSingleton<Random>()
                 .AddSingleton<GameStateModel>()
                 .AddTransient<IGameBoardTileViewModel, GameBoardTileViewModel>()
-                .AddTransient<IGameBoardViewModel, GameBoardViewModel>()
+                .AddSingleton<IGameBoardViewModel, GameBoardViewModel>()
                 .AddTransient<IGameSettingsViewModel, GameSettingsViewModel>()
+                .AddSingleton<IGameInstructionsViewModel, GameInstructionsViewModel>()
                 .AddTransient<IGameViewModel, GameViewModel>()
                 .BuildServiceProvider();
 

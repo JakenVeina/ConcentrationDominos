@@ -16,15 +16,15 @@ namespace System.Windows.Input
         : IAsyncActionCommand,
             IDisposable
     {
-        public AsyncActionCommand(Func<CancellationToken, Task> execute)
+        public AsyncActionCommand(Func<CancellationToken, Task> executeAsync)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _executeAsync = executeAsync ?? throw new ArgumentNullException(nameof(executeAsync));
             CanExecute = ObservableValue.Create(true);
         }
 
-        public AsyncActionCommand(Func<CancellationToken, Task> execute, IObservable<bool> canExecute)
+        public AsyncActionCommand(Func<CancellationToken, Task> executeAsync, IObservable<bool> canExecute)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _executeAsync = executeAsync ?? throw new ArgumentNullException(nameof(executeAsync));
             if (canExecute is null)
                 throw new ArgumentNullException(nameof(canExecute));
 
@@ -39,9 +39,9 @@ namespace System.Windows.Input
             });
         }
 
-        public AsyncActionCommand(Func<CancellationToken, Task> execute, IObservableReadOnlyValue<bool> canExecute)
+        public AsyncActionCommand(Func<CancellationToken, Task> executeAsync, IObservableReadOnlyValue<bool> canExecute)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _executeAsync = executeAsync ?? throw new ArgumentNullException(nameof(executeAsync));
             CanExecute = canExecute ?? ObservableValue.Create(true);
 
             _canExecuteSubscription = canExecute?.Subscribe(x =>
@@ -56,11 +56,11 @@ namespace System.Windows.Input
             => _canExecuteSubscription.Dispose();
 
         void ICommand.Execute(object parameter)
-            => _execute.Invoke(CancellationToken.None);
+            => _executeAsync.Invoke(CancellationToken.None);
 
         public Task ExecuteAsync(CancellationToken token)
-            => _execute.Invoke(token);
-        private readonly Func<CancellationToken, Task> _execute;
+            => _executeAsync.Invoke(token);
+        private readonly Func<CancellationToken, Task> _executeAsync;
 
         bool ICommand.CanExecute(object parameter)
             => CanExecute.Value;

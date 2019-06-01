@@ -10,7 +10,9 @@ namespace ConcentrationDominos.Formatting
         : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            => ((TimeSpan?)value)?.Humanize();
+            => (value is null) || ((value as string) == string.Empty)
+                ? null
+                : ((TimeSpan)value).Humanize();
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotSupportedException();

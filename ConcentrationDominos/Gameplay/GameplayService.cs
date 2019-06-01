@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -14,23 +12,17 @@ namespace ConcentrationDominos.Gameplay
     {
         IObservable<bool> CanPause { get; }
 
-        IObservable<bool> CanRequestSettingsChange { get; }
-
         IObservable<bool> CanReset { get; }
 
         IObservable<bool> CanStart { get; }
 
         IObservable<bool> CanUnpause { get; }
 
-        IObservable<Unit> SettingsChangeRequested { get; }
-
         Task FlipTileAsync(GameBoardTileModel tile, CancellationToken cancellationToken);
 
         IObservable<bool> ObserveCanFlipTile(IObservable<GameBoardTileModel> tile);
 
         void Pause();
-
-        void RequestSettingsChange();
 
         void Reset();
 
@@ -40,8 +32,7 @@ namespace ConcentrationDominos.Gameplay
     }
 
     public class GameplayService
-        : IGameplayService,
-            IDisposable
+        : IGameplayService
     {
         public GameplayService(
             GameStateModel gameState,
@@ -53,9 +44,6 @@ namespace ConcentrationDominos.Gameplay
             CanPause = _gameState.State
                 .Select(x => x == GameState.Running);
 
-            CanRequestSettingsChange = _gameState.State
-                .Select(x => x != GameState.Waiting);
-
             CanReset = _gameState.State
                 .Select(x => (x != GameState.Waiting) && (x != GameState.Idle));
 
@@ -64,26 +52,15 @@ namespace ConcentrationDominos.Gameplay
 
             CanUnpause = _gameState.State
                 .Select(x => x == GameState.Paused);
-
-            _settingsChangeRequested = new Subject<Unit>();
         }
 
         public IObservable<bool> CanPause { get; }
-
-        public IObservable<bool> CanRequestSettingsChange { get; }
 
         public IObservable<bool> CanReset { get; }
 
         public IObservable<bool> CanStart { get; }
 
         public IObservable<bool> CanUnpause { get; }
-
-        public IObservable<Unit> SettingsChangeRequested
-            => _settingsChangeRequested;
-        private readonly Subject<Unit> _settingsChangeRequested;
-
-        public void Dispose()
-            => _settingsChangeRequested.Dispose();
 
         public async Task FlipTileAsync(GameBoardTileModel tile, CancellationToken cancellationToken)
         {
@@ -151,13 +128,6 @@ namespace ConcentrationDominos.Gameplay
 
         public void Pause()
             => _gameState.State.Value = GameState.Paused;
-
-        public void RequestSettingsChange()
-        {
-            if(_gameState.State.Value == GameState.Running)
-                _gameState.State.Value = GameState.Paused;
-            _settingsChangeRequested.OnNext(Unit.Default);
-        }
 
         public void Reset()
         {

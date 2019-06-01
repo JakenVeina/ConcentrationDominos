@@ -2,14 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:ConcentrationDominos.ViewModels"
              xmlns:c="clr-namespace:ConcentrationDominos.Controls"
-             xmlns:f="clr-namespace:ConcentrationDominos.Formatting"
              x:Class="ConcentrationDominos.Views.GameSettingsView"
-             mc:Ignorable="d">
-    <UserControl.Resources>
-        <f:DominoSetHumanizer x:Key="DominoSetNameHumanizer"/>
-        <f:TimeSpanHumanizer x:Key="MemoryIntervalHumanizer"/>
-    </UserControl.Resources>
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:GameSettingsViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

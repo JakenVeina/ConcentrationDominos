@@ -1,10 +1,15 @@
 ﻿<Application xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:c="clr-namespace:ConcentrationDominos.Controls"
+             xmlns:f="clr-namespace:ConcentrationDominos.Formatting"
+             xmlns:v="clr-namespace:ConcentrationDominos.Views"
+             xmlns:vm="clr-namespace:ConcentrationDominos.ViewModels"
              x:Class="ConcentrationDominos.App"
              Startup="OnStartup"
              Exit="OnExit">
     <Application.Resources>
+        <f:DominoSetHumanizer x:Key="DominoSetNameHumanizer"/>
+        <f:TimeSpanHumanizer x:Key="MemoryIntervalHumanizer"/>
         <c:VectorIconDefinition x:Key="CheckIconDefinition"
                                 Geometry="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"
                                 NativeHeight="24"
@@ -68,6 +73,10 @@
                                 Geometry="M 20,5  A 9,9 180 1 1 20,23  A 9,9 180 1 1 20,5  M 20,29  A 9,9 180 1 1 20,47  A 9,9 180 1 1 20,29  M 20,53  A 9,9 180 1 1 20,71  A 9,9 180 1 1 20,53  M 20,77  A 9,9 180 1 1 20,95  A 9,9 180 1 1 20,77  M 50,5  A 9,9 180 1 1 50,23  A 9,9 180 1 1 50,5  M 50,29  A 9,9 180 1 1 50,47  A 9,9 180 1 1 50,29  M 50,53  A 9,9 180 1 1 50,71  A 9,9 180 1 1 50,53  M 50,77  A 9,9 180 1 1 50,95  A 9,9 180 1 1 50,77  M 80,5  A 9,9 180 1 1 80,23  A 9,9 180 1 1 80,5  M 80,29  A 9,9 180 1 1 80,47  A 9,9 180 1 1 80,29  M 80,53  A 9,9 180 1 1 80,71  A 9,9 180 1 1 80,53  M 80,77  A 9,9 180 1 1 80,95  A 9,9 180 1 1 80,77  Z"
                                 NativeHeight="100"
                                 NativeWidth="100"/>
+        <c:VectorIconDefinition x:Key="InfoIconDefinition"
+                                Geometry="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z"
+                                NativeHeight="24"
+                                NativeWidth="24"/>
         <c:VectorIconDefinition x:Key="PauseIconDefinition"
                                 Geometry="M14,19H18V5H14M6,19H10V5H6V19Z"
                                 NativeHeight="24"
@@ -170,5 +179,11 @@
                         Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
             </Style.Setters>
         </Style>
+        <DataTemplate DataType="{x:Type vm:GameInstructionsViewModel}">
+            <v:GameInstructionsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:GameSettingsViewModel}">
+            <v:GameSettingsView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

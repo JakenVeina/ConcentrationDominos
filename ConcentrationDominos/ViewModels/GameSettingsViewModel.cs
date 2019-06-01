@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Windows.Input;
 
 using ConcentrationDominos.Gameplay;
@@ -17,8 +15,6 @@ namespace ConcentrationDominos.ViewModels
         : INotifyPropertyChanged,
             IDisposable
     {
-        IObservable<Unit> ChangesRequested { get; }
-
         DominoSetType DominoSetType { get; }
 
         IReadOnlyList<DominoSetType> DominoSetTypes { get; }
@@ -26,8 +22,6 @@ namespace ConcentrationDominos.ViewModels
         TimeSpan MemoryInterval { get; }
 
         IReadOnlyList<TimeSpan> MemoryIntervals { get; }
-
-        IObservable<Unit> OperationCompleted { get; }
 
         IActionCommand SaveCommand { get; }
 
@@ -39,34 +33,13 @@ namespace ConcentrationDominos.ViewModels
             IGameSettingsViewModel
     {
         public GameSettingsViewModel(
-            IGameplayService gameplayService,
-            GameStateModel gameState)
+            GameStateModel gameState,
+            INavigationService navigationService)
         {
             _gameState = gameState;
+            _navigationService = navigationService;
 
             _subscriptions = new CompositeDisposable();
-
-            ChangesRequested = gameplayService.SettingsChangeRequested;
-            gameplayService.SettingsChangeRequested
-                .Subscribe(x => ReloadSettings())
-                .DisposeWith(_subscriptions);
-
-            DominoSetTypes = Enum.GetValues(typeof(DominoSetType))
-                .Cast<DominoSetType>()
-                .Where(x => x != DominoSetType.Empty)
-                .OrderBy(x => (int)x)
-                .ToArray();
-
-            MemoryIntervals = new[]
-            {
-                TimeSpan.Zero,
-                TimeSpan.FromSeconds(0.5),
-                TimeSpan.FromSeconds(1),
-                TimeSpan.FromSeconds(2),
-                TimeSpan.FromSeconds(5)
-            };
-
-            _operationCompleted = new Subject<Unit>();
 
             SaveCommand = new ActionCommand(
                     execute: () =>
@@ -74,27 +47,31 @@ namespace ConcentrationDominos.ViewModels
                         _gameState.Settings.Value = new GameSettingsModel(
                             _dominoSetType,
                             _memoryInterval);
-                        _operationCompleted.OnNext(Unit.Default);
+
+                        _navigationService.NavigateTo(null);
                     },
                     canExecute: Observable.CombineLatest(
                         _gameState.Settings,
                         this.ObserveProperty(x => x.DominoSetType),
                         this.ObserveProperty(x => x.MemoryInterval),
-                        (settings, dominoSetType, memoryInterval) =>
-                            (dominoSetType != settings.DominoSetType)
-                            || (memoryInterval != settings.MemoryInterval)))
+                        navigationService.CanNavigateTo,
+                        (settings, dominoSetType, memoryInterval, canNavigateTo) =>
+                            canNavigateTo
+                                && ((dominoSetType != settings.DominoSetType)
+                                    || (memoryInterval != settings.MemoryInterval))))
                 .DisposeWith(_subscriptions);
 
             UndoCommand = new ActionCommand(
                     execute: () =>
                     {
                         ReloadSettings();
-                        _operationCompleted.OnNext(Unit.Default);
+
+                        _navigationService.NavigateTo(null);
                     })
                 .DisposeWith(_subscriptions);
-        }
 
-        public IObservable<Unit> ChangesRequested { get; }
+            ReloadSettings();
+        }
 
         public DominoSetType DominoSetType
         {
@@ -103,7 +80,14 @@ namespace ConcentrationDominos.ViewModels
         }
         private DominoSetType _dominoSetType;
 
-        public IReadOnlyList<DominoSetType> DominoSetTypes { get; }
+        public IReadOnlyList<DominoSetType> DominoSetTypes
+            => _dominoSetTypes;
+        private static readonly DominoSetType[] _dominoSetTypes
+            = Enum.GetValues(typeof(DominoSetType))
+                .Cast<DominoSetType>()
+                .Where(x => x != DominoSetType.Empty)
+                .OrderBy(x => (int)x)
+                .ToArray();
 
         public TimeSpan MemoryInterval
         {
@@ -112,21 +96,24 @@ namespace ConcentrationDominos.ViewModels
         }
         private TimeSpan _memoryInterval;
 
-        public IObservable<Unit> OperationCompleted
-            => _operationCompleted;
-        private readonly Subject<Unit> _operationCompleted;
-
-        public IReadOnlyList<TimeSpan> MemoryIntervals { get; }
+        public IReadOnlyList<TimeSpan> MemoryIntervals
+            => _memoryIntervals;
+        private static readonly TimeSpan[] _memoryIntervals
+            = new[]
+            {
+                TimeSpan.Zero,
+                TimeSpan.FromSeconds(0.5),
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(2),
+                TimeSpan.FromSeconds(5)
+            };
 
         public IActionCommand SaveCommand { get; }
 
         public IActionCommand UndoCommand { get; }
 
         public void Dispose()
-        {
-            _subscriptions.Dispose();
-            _operationCompleted.Dispose();
-        }
+            => _subscriptions.Dispose();
 
         private void ReloadSettings()
         {
@@ -135,6 +122,8 @@ namespace ConcentrationDominos.ViewModels
         }
 
         private readonly GameStateModel _gameState;
+
+        private readonly INavigationService _navigationService;
 
         private readonly CompositeDisposable _subscriptions;
     }

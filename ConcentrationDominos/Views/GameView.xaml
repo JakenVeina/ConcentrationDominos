@@ -4,14 +4,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:v="clr-namespace:ConcentrationDominos.Views"
+        xmlns:vm="clr-namespace:ConcentrationDominos.ViewModels"
         xmlns:c="clr-namespace:ConcentrationDominos.Controls"
         xmlns:b="clr-namespace:ConcentrationDominos.Behaviors"
         x:Class="ConcentrationDominos.Views.GameView"
         mc:Ignorable="d" 
+        d:DataContext="{d:DesignInstance Type=vm:GameViewModel}"
         Title="Concentration Dominos"
         Height="600"
         SizeToContent="Width">
-    <Grid>
+    <Grid x:Name="Game">
         <Grid.RowDefinitions>
             <RowDefinition Height="35"/>
             <RowDefinition Height="*"/>
@@ -26,18 +28,33 @@
 
         <Button Grid.Row="0"
                 Grid.Column="0"
-                Command="{Binding UnpauseCommand}">
+                Command="{Binding ResetCommand}">
             <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
-                          Definition="{StaticResource PlayIconDefinition}"
-                          ToolTip="Unpause"/>
+                          Definition="{StaticResource RestartIconDefinition}"
+                          ToolTip="Reset"/>
+        </Button>
+
+        <Button x:Name="Pause"
+                Grid.Row="0"
+                Grid.Column="1"
+                Command="{Binding PauseCommand}">
+            <i:Interaction.Behaviors>
+                <b:VisibilityController IsVisible="{Binding IsEnabled, ElementName=Pause}"/>
+            </i:Interaction.Behaviors>
+            <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
+                          Definition="{StaticResource PauseIconDefinition}"
+                          ToolTip="Pause"/>
         </Button>
 
         <Button Grid.Row="0"
                 Grid.Column="1"
-                Command="{Binding PauseCommand}">
+                Command="{Binding UnpauseCommand}">
+            <i:Interaction.Behaviors>
+                <b:VisibilityController IsHidden="{Binding IsEnabled, ElementName=Pause}"/>
+            </i:Interaction.Behaviors>
             <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
-                          Definition="{StaticResource PauseIconDefinition}"
-                          ToolTip="Pause"/>
+                          Definition="{StaticResource PlayIconDefinition}"
+                          ToolTip="Unpause"/>
         </Button>
 
         <Border Grid.Row="0"
@@ -54,23 +71,24 @@
 
         <Button Grid.Row="0"
                 Grid.Column="3"
-                Command="{Binding ResetCommand}">
-            <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
-                          Definition="{StaticResource RestartIconDefinition}"
-                          ToolTip="Reset"/>
-        </Button>
-
-        <Button Grid.Row="0"
-                Grid.Column="4"
-                Command="{Binding RequestSettingsChangeCommand}">
+                Command="{Binding NavigateToSettingsCommand}">
             <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
                           Definition="{StaticResource SettingsIconDefinition}"
                           ToolTip="Settings"/>
         </Button>
 
+        <Button Grid.Row="0"
+                Grid.Column="4"
+                Command="{Binding NavigateToInstructionsCommand}">
+            <c:VectorIcon Style="{StaticResource ButtonIconStyle}"
+                          Definition="{StaticResource InfoIconDefinition}"
+                          ToolTip="Instructions"/>
+        </Button>
+
         <Grid Grid.Row="1"
               Grid.Column="0"
-              Grid.ColumnSpan="5">
+              Grid.ColumnSpan="5"
+              x:Name="GameBoard">
             <v:GameBoardView DataContext="{Binding GameBoard}"/>
 
             <Grid Background="#77CCCCCC"
@@ -117,16 +135,23 @@
               Grid.RowSpan="2"
               Grid.ColumnSpan="5"
               Background="#77CCCCCC"
-              Visibility="Hidden"
-              DataContext="{Binding Settings}">
-            <i:Interaction.Triggers>
-                <b:ObservableUnitTrigger Source="{Binding ChangesRequested}">
-                    <b:SetVisibilityAction Value="Visible"/>
-                </b:ObservableUnitTrigger>
-                <b:ObservableUnitTrigger Source="{Binding OperationCompleted}">
-                    <b:SetVisibilityAction Value="Hidden"/>
-                </b:ObservableUnitTrigger>
-            </i:Interaction.Triggers>
+              MaxWidth="{Binding ActualWidth, ElementName=GameBoard}"
+              MaxHeight="{Binding ActualHeight, ElementName=Game}">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Style.Setters>
+                        <Setter Property="Visibility"
+                                Value="Visible"/>
+                    </Style.Setters>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentNavigationTarget}"
+                                     Value="{x:Null}">
+                            <Setter Property="Visibility"
+                                Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <Border HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Background="WhiteSmoke"
@@ -134,7 +159,7 @@
                     BorderThickness="1"
                     CornerRadius="10"
                     Padding="15">
-                <v:GameSettingsView/>
+                <ContentPresenter Content="{Binding CurrentNavigationTarget}"/>
             </Border>
         </Grid>
 
