@@ -1,0 +1,90 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:c="clr-namespace:ConcentrationDominos.Controls">
+    <Style x:Key="DominoSuitIconStyle"
+           TargetType="c:VectorIcon">
+        <Style.Setters>
+            <Setter Property="Brush"
+                    Value="Black"/>
+        </Style.Setters>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding}"
+                         Value="{x:Null}">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitZeroIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="0">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitZeroIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="1">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitOneIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="2">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitTwoIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="3">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitThreeIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="4">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitFourIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="5">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitFiveIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="6">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitSixIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="7">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitSevenIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="8">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitEightIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="9">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitNineIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="10">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitTenIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="11">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitElevenIconDefinition}"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding}"
+                         Value="12">
+                <Setter Property="Definition"
+                        Value="{StaticResource DominoSuitTwelveIconDefinition}"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="ButtonIconStyle"
+           TargetType="c:VectorIcon">
+        <Style.Setters>
+            <Setter Property="Brush"
+                    Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"/>
+        </Style.Setters>
+    </Style>
+</ResourceDictionary>

@@ -143,6 +143,22 @@
     <Compile Include="Controls\VectorIcon.xaml.cs">
       <DependentUpon>VectorIcon.xaml</DependentUpon>
     </Compile>
+    <Page Include="Resources\DataTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Formatters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\VectorIconDefinitions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GameBoardTileView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
