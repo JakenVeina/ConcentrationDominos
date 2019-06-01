@@ -98,8 +98,9 @@
     <Compile Include="Formatting\TimeSpanHumanizer.cs" />
     <Compile Include="Gameplay\GameClockBehavior.cs" />
     <Compile Include="Gameplay\GameBuildingBehavior.cs" />
+    <Compile Include="Gameplay\GameplaySetup.cs" />
     <Compile Include="Gameplay\IBehavior.cs" />
-    <Compile Include="Gameplay\NavigationService.cs" />
+    <Compile Include="ViewModels\NavigationService.cs" />
     <Compile Include="Models\DominoModel.cs" />
     <Compile Include="Models\DominoSetModel.cs" />
     <Compile Include="Models\DominoSetType.cs" />
@@ -111,12 +112,14 @@
     <Compile Include="Models\GameStateModel.cs" />
     <Compile Include="Gameplay\GameplayService.cs" />
     <Compile Include="Gameplay\SystemClockBehavior.cs" />
+    <Compile Include="Models\ModelsSetup.cs" />
     <Compile Include="ViewModels\GameBoardTileViewModel.cs" />
     <Compile Include="ViewModels\GameBoardViewModel.cs" />
     <Compile Include="ViewModels\GameInstructionsViewModel.cs" />
     <Compile Include="ViewModels\GameSettingsViewModel.cs" />
     <Compile Include="ViewModels\GameViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\ViewModelsSetup.cs" />
     <Compile Include="Views\GameBoardTileView.xaml.cs">
       <DependentUpon>GameBoardTileView.xaml</DependentUpon>
     </Compile>

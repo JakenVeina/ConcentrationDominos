@@ -4,7 +4,7 @@ using System.Reactive.Subjects;
 
 using ConcentrationDominos.Models;
 
-namespace ConcentrationDominos.Gameplay
+namespace ConcentrationDominos.ViewModels
 {
     public interface INavigationService
     {

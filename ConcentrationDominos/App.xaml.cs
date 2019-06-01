@@ -25,20 +25,10 @@ namespace ConcentrationDominos
         private void OnStartup(object sender, StartupEventArgs e)
         {
             _serviceProvider = new ServiceCollection()
-                .AddSingleton<SystemClockBehavior>()
-                .AddSingleton<ISystemClock>(x => x.GetRequiredService<SystemClockBehavior>())
-                .AddSingleton<IBehavior>(x => x.GetRequiredService<SystemClockBehavior>())
-                .AddSingleton<IBehavior, GameBuildingBehavior>()
-                .AddSingleton<IBehavior, GameClockBehavior>()
-                .AddSingleton<IGameplayService, GameplayService>()
-                .AddSingleton<INavigationService, NavigationService>()
                 .AddSingleton<Random>()
-                .AddSingleton<GameStateModel>()
-                .AddTransient<IGameBoardTileViewModel, GameBoardTileViewModel>()
-                .AddSingleton<IGameBoardViewModel, GameBoardViewModel>()
-                .AddTransient<IGameSettingsViewModel, GameSettingsViewModel>()
-                .AddSingleton<IGameInstructionsViewModel, GameInstructionsViewModel>()
-                .AddTransient<IGameViewModel, GameViewModel>()
+                .AddModels()
+                .AddGameplay()
+                .AddViewModels()
                 .BuildServiceProvider();
 
             _serviceProvider.GetRequiredService<GameStateModel>()
