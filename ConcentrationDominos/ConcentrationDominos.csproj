@@ -86,9 +86,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\ObservableTrigger.cs" />
-    <Compile Include="Behaviors\ObservableUnitTrigger.cs" />
-    <Compile Include="Behaviors\SetVisibilityAction.cs" />
     <Compile Include="Behaviors\VisibilityController.cs" />
     <Compile Include="Commands\ActionCommand.cs" />
     <Compile Include="Commands\AsyncActionCommand.cs" />
